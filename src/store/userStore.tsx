@@ -1,0 +1,46 @@
+"use client";
+import { formType } from "@/types/types";
+import React, {
+  createContext,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useMemo,
+  useRef,
+} from "react";
+
+interface UserContextType {
+  formBuilderData: formType;
+  setFormBuilderData: React.Dispatch<SetStateAction<formType>>;
+  scrollRef: React.MutableRefObject<HTMLDivElement>;
+}
+
+const UserContext = createContext<UserContextType | undefined>(undefined);
+
+const useUserContext = (): UserContextType => {
+  const context = useContext(UserContext);
+  if (context === undefined) {
+    throw new Error("useUserContext must be used within a UserProvider");
+  }
+  return context;
+};
+
+const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [formBuilderData, setFormBuilderData] = React.useState<formType>({
+    form_title: "Untitled Form",
+    questions: [],
+  });
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const value = useMemo(
+    () => ({
+      scrollRef,
+      formBuilderData,
+      setFormBuilderData,
+    }),
+    [formBuilderData]
+  );
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+};
+
+export { UserProvider, useUserContext };
