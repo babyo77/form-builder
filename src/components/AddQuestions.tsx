@@ -20,7 +20,7 @@ export function AddQuestions({
   currentQuestionIndex?: number;
   isInputField?: boolean;
 }) {
-  const { setFormBuilderData, scrollRef } = useUserContext();
+  const { setFormBuilderData } = useUserContext();
 
   const memoizedQuestionTypes = useMemo(() => questionTypes, []);
 

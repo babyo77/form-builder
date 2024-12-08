@@ -7,6 +7,7 @@ function useAddQuestion() {
   const { setFormBuilderData, scrollRef, formBuilderData } = useUserContext();
   const handleAddQuestion = useCallback(
     (category: questionType["category"]) => {
+      //@ts-expect-error:ignore _id
       setFormBuilderData((prev) => {
         const newQuestion = {
           id: prev.questions.length + 1,
@@ -36,16 +37,12 @@ function useAddQuestion() {
         };
       });
       const t = setTimeout(() => {
-        scroll();
+        scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
       }, 0);
       return () => clearTimeout(t);
     },
-    [setFormBuilderData]
+    [setFormBuilderData, scrollRef]
   );
-
-  function scroll() {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }
 
   // update form data
   const addOption = useCallback(

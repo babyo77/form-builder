@@ -1,6 +1,5 @@
 import RenderSubmissionForm from "@/components/RenderSubmissionForm";
 import api from "@/lib/api";
-import { formType } from "@/types/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";

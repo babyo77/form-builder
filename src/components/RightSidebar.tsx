@@ -18,7 +18,9 @@ function RightSidebar() {
         await navigator.clipboard.writeText(url);
         toast.success("Link copied to clipboard!");
       }
-    } catch (error: any) {}
+    } catch (error: any) {
+      console.log(error);
+    }
   };
   return (
     <div className="col-span-1 max-md:hidden h-full w-full flex p-4 items-start justify-start flex-col gap-4">

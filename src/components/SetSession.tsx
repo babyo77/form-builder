@@ -42,7 +42,7 @@ function SetSession({
       setFormSubmission(user.submissions);
     }
     api.setAuthToken(user?.token);
-  }, [user, setFormBuilderData]);
+  }, [user, setFormBuilderData, setFormSubmission]);
 
   return null;
 }

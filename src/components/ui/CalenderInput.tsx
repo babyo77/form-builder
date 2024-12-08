@@ -14,7 +14,10 @@ import {
 import { PopoverClose } from "@radix-ui/react-popover";
 import DateIcon from "../icons/DateIcon";
 
-interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  defaultValue?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
 export default function DatePicker({
   defaultValue,
