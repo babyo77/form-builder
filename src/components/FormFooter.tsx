@@ -42,7 +42,7 @@ function FormFooterComp() {
         },
       });
     }
-  }, [formBuilderData]);
+  }, [formBuilderData, setFormBuilderData]);
 
   const saveForm = useCallback(async () => {
     const form = validateFormStructure(formBuilderData.questions);
@@ -77,7 +77,7 @@ function FormFooterComp() {
       setDraft(false);
     }
     setLoader(false);
-  }, []);
+  }, [setFormBuilderData, formBuilderData]);
   const saveFromRealtime = useDebounce(saveForm);
   useEffect(() => {
     setDraft(false);
