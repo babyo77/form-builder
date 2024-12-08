@@ -18,7 +18,9 @@ function SetSession({
 }) {
   const { setFormBuilderData, setFormSubmission } = useUserContext();
   useEffect(() => {
+    if (localStorage.getItem("auth")) return;
     if (!user) {
+      localStorage.setItem("auth", "sd");
       api
         .get(`${process.env.NEXT_PUBLIC_BACKEND_URI}/api/make/session`, {
           showErrorToast: false,
@@ -28,10 +30,9 @@ function SetSession({
             api.setAuthToken((res.data as any).token);
             await api.post("/api/login", res.data);
           }
-        })
-        .catch(() => {
           localStorage.removeItem("auth");
         });
+
       return;
     }
     if (user.savedForm) {
