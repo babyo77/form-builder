@@ -51,15 +51,14 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
       variant,
       onChanged,
       value: propValue,
-      type,
       maxLength,
       minLength,
       pattern,
-      required,
       disabled,
       readOnly,
       ...props
     },
+    //@ts-check
     ref
   ) => {
     // Local state for immediate editing
@@ -90,7 +89,6 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
         const selection = window.getSelection();
         const range = document.createRange();
 
-        let currentNode: Node | null = inputRef.current;
         let currentOffset = 0;
 
         // Traverse through text nodes to find the correct position
@@ -174,7 +172,7 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
         setLocalValue(propValue);
         setConfirmedValue(propValue);
       }
-    }, [propValue]);
+    }, [propValue, confirmedValue]);
 
     const handleFocus = useCallback(() => {
       setIsFocused(true);
