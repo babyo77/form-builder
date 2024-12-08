@@ -14,13 +14,6 @@ interface CustomInputProps
   onChanged?: (value: string) => void;
   value?: string;
   placeholder?: string;
-  type?: string;
-  maxLength?: number;
-  minLength?: number;
-  pattern?: string;
-  required?: boolean;
-  disabled?: boolean;
-  readOnly?: boolean;
 }
 
 const inputVariants = cva(
@@ -51,11 +44,6 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
       variant,
       onChanged,
       value: propValue,
-      maxLength,
-      minLength,
-      pattern,
-      disabled,
-      readOnly,
       ...props
     },
     //@ts-check
@@ -133,26 +121,15 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
 
         const newValue = e.currentTarget.textContent || "";
 
-        // Apply maxLength if specified
-        const limitedValue = maxLength
-          ? newValue.slice(0, maxLength)
-          : newValue;
+        // Update local value for immediate editing
+        setLocalValue(newValue);
 
-        // Check minLength and pattern if needed
-        if (
-          (!minLength || limitedValue.length >= minLength) &&
-          (!pattern || new RegExp(pattern).test(limitedValue))
-        ) {
-          // Update local value for immediate editing
-          setLocalValue(limitedValue);
-
-          // Restore caret position in next render cycle
-          setTimeout(() => {
-            restoreCaretPosition(lastCaretPositionRef.current);
-          }, 0);
-        }
+        // Restore caret position in next render cycle
+        setTimeout(() => {
+          restoreCaretPosition(lastCaretPositionRef.current);
+        }, 0);
       },
-      [maxLength, minLength, pattern, saveCaretPosition, restoreCaretPosition]
+      [saveCaretPosition, restoreCaretPosition]
     );
 
     // Handle blur to confirm value
@@ -182,7 +159,7 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
       <div
         ref={inputRef}
         role="textbox"
-        contentEditable={!disabled && !readOnly}
+        contentEditable
         suppressContentEditableWarning
         aria-multiline="false"
         data-placeholder={placeholder}
@@ -195,7 +172,6 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
           isFocused || localValue.trim().length > 0
             ? "text-black"
             : "text-muted-foreground",
-          disabled ? "opacity-50 cursor-not-allowed" : "",
 
           // Improved placeholder positioning
           "after:absolute after:top-1/2 after:-translate-y-1/2 after:left-0 after:text-muted-foreground after:pointer-events-none after:opacity-50",
