@@ -86,7 +86,7 @@ function FormFooterComp() {
       {formBuilderData.questions.length >= 3 && <AddQuestions />}
       <Button
         onClick={handlePublish}
-        disabled={formBuilderData.questions.length == 0}
+        disabled={!formBuilderData._id || formBuilderData.questions.length == 0}
         size="sm"
         className="gap-0.5"
         variant={!formBuilderData.publish ? "peerlist" : "destructive"}
