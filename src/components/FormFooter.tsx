@@ -18,6 +18,9 @@ function FormFooterComp() {
         formBuilderData.publish ? "?type=un" : ""
       }`,
       {
+        headers: {
+          form: formBuilderData._id || "",
+        },
         credentials: "include",
       }
     );
@@ -37,7 +40,7 @@ function FormFooterComp() {
   }, [formBuilderData]);
   const [loader, setLoader] = useState<boolean>(false);
   const saveFormController = useRef<AbortController | null>(null);
-  const saveForm = async () => {
+  const saveForm = useCallback(async () => {
     const form = validateFormStructure(formBuilderData.questions);
     if (form.errors) {
       console.log(form.errors);
@@ -50,23 +53,28 @@ function FormFooterComp() {
 
     const controller = new AbortController();
     saveFormController.current = controller;
-    await api.patch(
+    const res = await api.patch(
       `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/form/save`,
       formBuilderData,
       {
         signal: controller.signal,
-        showErrorToast: false,
         credentials: "include",
       }
     );
+    if (res.success) {
+      setFormBuilderData((prev) => ({
+        ...prev,
+        _id: res.data as any,
+      }));
+    }
     setDraft(true);
     setLoader(false);
-  };
+  }, []);
   const saveFromRealtime = useDebounce(saveForm);
   useEffect(() => {
     setDraft(false);
     saveFromRealtime();
-  }, [formBuilderData]);
+  }, [formBuilderData.questions]);
   return (
     <div className="bg-peerlistBackground z-10 border-t flex p-4 px-6 max-md:px-2 gap-1.5 items-center justify-between w-full">
       <Button
