@@ -10,7 +10,7 @@ import { LoaderCircle } from "lucide-react";
 import useDebounce from "@/app/hooks/useDebounce";
 import { toast } from "sonner";
 function FormFooterComp() {
-  const { formBuilderData, setFormBuilderData, editing } = useUserContext();
+  const { formBuilderData, setFormBuilderData } = useUserContext();
   const [draft, setDraft] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [publishLoader, setPublishLoader] = useState<boolean>(false);
@@ -50,13 +50,13 @@ function FormFooterComp() {
       console.log(form.errors);
       return;
     }
+    setLoader(true);
     if (saveFormController.current) {
       saveFormController.current.abort();
     }
+
     const controller = new AbortController();
     saveFormController.current = controller;
-    if (editing) return;
-    setLoader(true);
     const res = await api.patch(
       `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/form/save`,
       formBuilderData,
@@ -77,7 +77,7 @@ function FormFooterComp() {
       setDraft(false);
     }
     setLoader(false);
-  }, [setFormBuilderData, formBuilderData, editing]);
+  }, [setFormBuilderData, formBuilderData]);
   const saveFromRealtime = useDebounce(saveForm);
   useEffect(() => {
     setDraft(false);

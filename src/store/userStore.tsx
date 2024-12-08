@@ -18,8 +18,6 @@ interface UserContextType {
   scrollRef: React.MutableRefObject<HTMLDivElement | null>;
   formSubmission: submissions[];
   setFormSubmission: React.Dispatch<SetStateAction<submissions[]>>;
-  editing: boolean;
-  setEditing: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -47,20 +45,17 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     ],
   });
   const [formSubmission, setFormSubmission] = useState<any[]>([]);
-  const [editing, setEditing] = useState<boolean>(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const value = useMemo(
     () => ({
-      editing,
-      setEditing,
       formSubmission,
       setFormSubmission,
       scrollRef,
       formBuilderData,
       setFormBuilderData,
     }),
-    [formBuilderData, formSubmission, editing]
+    [formBuilderData, formSubmission]
   );
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
