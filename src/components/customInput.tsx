@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { useUserContext } from "@/store/userStore";
 import { cva, type VariantProps } from "class-variance-authority";
 import React, {
   useState,
@@ -61,6 +62,7 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
     //@ts-check
     ref
   ) => {
+    const { setEditing } = useUserContext();
     // Local state for immediate editing
     const [localValue, setLocalValue] = useState(propValue || "");
     // State to track the last confirmed value
@@ -130,7 +132,7 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
       (e: React.FormEvent<HTMLDivElement>) => {
         // Save current caret position before updating
         saveCaretPosition();
-
+        setEditing(true);
         const newValue = e.currentTarget.textContent || "";
 
         // Apply maxLength if specified
@@ -152,7 +154,14 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
           }, 0);
         }
       },
-      [maxLength, minLength, pattern, saveCaretPosition, restoreCaretPosition]
+      [
+        maxLength,
+        minLength,
+        pattern,
+        setEditing,
+        saveCaretPosition,
+        restoreCaretPosition,
+      ]
     );
 
     // Handle blur to confirm value
@@ -163,8 +172,9 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
       if (localValue !== confirmedValue) {
         onChanged?.(localValue);
         setConfirmedValue(localValue);
+        setEditing(false);
       }
-    }, [localValue, confirmedValue, onChanged]);
+    }, [localValue, confirmedValue, onChanged, setEditing]);
 
     // Sync prop value with confirmed value
     useEffect(() => {
