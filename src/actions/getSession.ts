@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 export async function getSession() {
   try {
     const guest_token = cookies().get("guest_token")?.value;
+    if (!guest_token) return null;
     const response = await api.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/check`,
       {
@@ -16,6 +17,7 @@ export async function getSession() {
         cache: "no-cache",
       }
     );
+    console.log(response.status);
 
     if (response.success) {
       return response.data as any;

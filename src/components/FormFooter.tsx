@@ -57,6 +57,7 @@ function FormFooterComp() {
       `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/form/save`,
       formBuilderData,
       {
+        showErrorToast: false,
         signal: controller.signal,
         credentials: "include",
       }
