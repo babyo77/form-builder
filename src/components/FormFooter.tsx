@@ -12,7 +12,11 @@ import { toast } from "sonner";
 function FormFooterComp() {
   const { formBuilderData, setFormBuilderData } = useUserContext();
   const [draft, setDraft] = useState<boolean>(false);
+  const [loader, setLoader] = useState<boolean>(false);
+  const [publishLoader, setPublishLoader] = useState<boolean>(false);
+  const saveFormController = useRef<AbortController | null>(null);
   const handlePublish = useCallback(async () => {
+    setPublishLoader(true);
     const res = await api.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/form/publish${
         formBuilderData.publish ? "?type=un" : ""
@@ -24,6 +28,7 @@ function FormFooterComp() {
         credentials: "include",
       }
     );
+    setPublishLoader(false);
     if (res.success) {
       setFormBuilderData((prev) => ({
         ...prev,
@@ -38,8 +43,7 @@ function FormFooterComp() {
       });
     }
   }, [formBuilderData]);
-  const [loader, setLoader] = useState<boolean>(false);
-  const saveFormController = useRef<AbortController | null>(null);
+
   const saveForm = useCallback(async () => {
     const form = validateFormStructure(formBuilderData.questions);
     if (form.errors) {
@@ -98,12 +102,19 @@ function FormFooterComp() {
       {formBuilderData.questions.length >= 3 && <AddQuestions />}
       <Button
         onClick={handlePublish}
-        disabled={formBuilderData.questions.length == 0 || !draft}
+        disabled={
+          formBuilderData.questions.length == 0 || !draft || publishLoader
+        }
         size="sm"
         className="gap-0.5"
         variant={!formBuilderData.publish ? "peerlist" : "destructive"}
       >
-        {!formBuilderData.publish && <TickIcon />}
+        {publishLoader ? (
+          <LoaderCircle className="  size-4 animate-spin" />
+        ) : (
+          <>{!formBuilderData.publish && <TickIcon />}</>
+        )}
+
         {!formBuilderData.publish ? "Publish" : "Unpublish"}
       </Button>
     </div>
