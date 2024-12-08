@@ -14,6 +14,7 @@ const config: Config = {
         peerlistBorder: "#6A737D",
         peerlistBackground: "#F6F8FAE5",
         peerlistHoverBackground: "#FAFBFC",
+        peerlistRed: "#EB5757",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

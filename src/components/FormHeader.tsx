@@ -3,6 +3,7 @@ import RightArrow from "@/components/icons/RightArrow";
 import { Button } from "@/components/ui/button";
 import CustomInput from "@/components/customInput";
 import { useUserContext } from "@/store/userStore";
+import Link from "next/link";
 function FormHeaderComp() {
   const { formBuilderData, setFormBuilderData } = useUserContext();
   const handleUpdate = useCallback(
@@ -12,16 +13,25 @@ function FormHeaderComp() {
     [setFormBuilderData]
   );
   return (
-    <div className="border-b flex p-2 max-md:px-2 px-6 gap-4 items-center justify-between w-full">
+    <div className="border-b flex p-2 max-md:px-2 px-6 gap-4 items-start justify-between w-full">
       <CustomInput
+        aria-label="form title"
+        value={formBuilderData?.form_title}
         onChanged={handleUpdate}
         variant={"title"}
-        placeholder={formBuilderData.form_title}
+        placeholder={"Untitled form"}
       />
-      <Button size="sm" className="shadow-none gap-0.5" variant="outline">
-        <p>Preview</p>
-        <RightArrow />
-      </Button>
+      <Link href={"/preview"} target="_blank">
+        <Button
+          disabled={formBuilderData.questions.length == 0}
+          size="sm"
+          className="shadow-none gap-0.5"
+          variant="outline"
+        >
+          <p>Preview</p>
+          <RightArrow />
+        </Button>
+      </Link>
     </div>
   );
 }

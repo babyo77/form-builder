@@ -1,19 +1,22 @@
 export interface formType {
+  _id?: string;
   form_title: string;
   questions: questionType[];
+  publish?: boolean;
 }
 // Types for formQuestion
 export interface questionType {
-  position: number;
+  _id: string;
+  id: number;
   category:
     | "short_answer"
     | "long_answer"
     | "single_select"
-    | "number"
+    | "date"
     | "url"
-    | "date";
-  options?: (string | undefined)[];
-  title: undefined | string;
-  helpText: undefined | string;
+    | "number";
   required: boolean;
+  title?: string;
+  helpText?: string;
+  options?: (string | null | undefined)[];
 }

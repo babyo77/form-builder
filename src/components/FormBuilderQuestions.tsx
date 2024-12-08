@@ -1,94 +1,81 @@
-// import { useUserContext } from "@/store/userStore";
-// import React, { useState } from "react";
 // import DragIcon from "@/components/icons/DragIcon";
-
 // import {
 //   Card,
 //   CardContent,
 //   CardDescription,
+//   CardFooter,
 //   CardHeader,
 //   CardTitle,
 // } from "@/components/ui/card";
-
 // import PlusIcon from "@/components/icons/PlusIcon";
-// import { iconMapping, inputFieldMapping } from "@/lib/utils";
+// import { iconMapping, inputFieldMapping, OPTION_LIMIT } from "@/lib/utils";
 // import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 // import MinusIcon from "@/components/icons/MinusIcon";
 // import CustomInput from "@/components/customInput";
 // import { AddQuestions } from "@/components/AddQuestions";
+// import DeleteIcon from "./icons/DeleteIcon";
+// import { Label } from "./ui/label";
+// import { Switch } from "./ui/switch";
 // import { questionType } from "@/types/types";
+// import { useSortable } from "@dnd-kit/sortable";
+// import useAddQuestion from "@/app/hooks/useAddQuestion";
+// import { CSS } from "@dnd-kit/utilities";
 
-// function FormBuilderQuestionsComp({
+// function FormBuilderQuestions({
 //   question,
-//   index,
+//   questionIndex,
 // }: {
 //   question: questionType;
-//   index: number;
+//   questionIndex: number;
 // }) {
-//   const { formBuilderData, setFormBuilderData } = useUserContext();
-//   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-//   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
-//   // Drag start handler
-//   const handleDragStart = (index: number) => {
-//     setDraggedIndex(index);
+//   const { attributes, listeners, setNodeRef, transform, transition } =
+//     useSortable({ id: question.id });
+//   const {
+//     addOption,
+//     deleteQuestion,
+//     toggleRequired,
+//     removeOption,
+//     updateOption,
+//     updateQuestionField,
+//   } = useAddQuestion();
+//   const style = {
+//     transform: CSS.Transform.toString(transform),
+//     transition,
 //   };
-
-//   // Drag over handler
-//   const handleDragOver = (e: React.DragEvent, index: number) => {
-//     e.preventDefault();
-//     setHoveredIndex(index);
-//   };
-
-//   // Drag leave handler to reset hover
-//   const handleDragLeave = (e: React.DragEvent, index: number) => {
-//     e.preventDefault();
-//     setHoveredIndex(null);
-//     if (draggedIndex === null || draggedIndex === index) return;
-
-//     const updatedCards = [...formBuilderData.questions];
-//     const [draggedCard] = updatedCards.splice(draggedIndex, 1); // Remove dragged card
-//     updatedCards.splice(index, 0, draggedCard); // Insert it at the hovered index
-//     console.log(updatedCards);
-
-//     // Update the state after drag operation
-//     setFormBuilderData((prev) => ({ ...prev, questions: updatedCards }));
-//   };
-
-//   // Drop handler to reset dragging states
-//   const handleDrop = () => {
-//     setDraggedIndex(null);
-//     setHoveredIndex(null);
-//   };
-
 //   return (
 //     <Card
-//       draggable
-//       onDragStart={() => handleDragStart(index)}
-//       onDragOver={(e) => handleDragOver(e, index)}
-//       onDragLeave={(e) => handleDragLeave(e, index)}
-//       onDrop={handleDrop}
-//       key={question.position}
-//       className={`w-full transition-all ${
-//         hoveredIndex === index ? "border-peerlistGreen shadow-lg" : "border"
-//       }`}
+//       ref={setNodeRef}
+//       {...attributes}
+//       {...listeners}
+//       style={style}
+//       className="w-full border"
 //     >
 //       <CardHeader>
 //         <CardTitle className="flex items-center gap-4">
-//           <CustomInput placeholder={question?.title} variant={"title"} />
-//           <div className=" flex gap-1">
-//             <div className=" flex  items-center">
+//           <CustomInput
+//             value={question.title}
+//             onChanged={(value) =>
+//               updateQuestionField(questionIndex, "title", value)
+//             }
+//             placeholder={"Write a question"}
+//             variant={"title"}
+//           />
+//           <div className="flex gap-1">
+//             <div className="flex items-center">
 //               {iconMapping[question?.category]}
-//               <AddQuestions isInputField />
+//               <AddQuestions currentQuestionIndex={questionIndex} isInputField />
 //             </div>
 //             <DragIcon />
 //           </div>
 //         </CardTitle>
 //         <CardDescription>
 //           <CustomInput
+//             value={question.helpText}
 //             variant={"helpText"}
+//             onChanged={(value) =>
+//               updateQuestionField(questionIndex, "helpText", value)
+//             }
 //             placeholder={
-//               question?.helpText ||
 //               "Write a help text or caption (leave empty if not needed)."
 //             }
 //           />
@@ -97,31 +84,51 @@
 //       <CardContent>
 //         {question.category === "single_select" ? (
 //           <RadioGroup>
-//             {question?.options?.map((option, index) => (
+//             {question.options?.map((option, optionIndex) => (
 //               <div
-//                 key={index}
+//                 key={optionIndex + Math.random()}
 //                 className={`${
 //                   !option && "text-muted-foreground"
 //                 } flex items-center space-x-2`}
 //               >
 //                 <RadioGroupItem
-//                   value={option || `Option ${index + 1}`}
-//                   id={option || `Option ${index + 1}`}
+//                   value={option || `Option ${optionIndex + 1}`}
+//                   id={option || `Option ${optionIndex + 1}`}
 //                 />
-//                 <CustomInput placeholder={option || `Option ${index + 1}`} />
-
+//                 <CustomInput
+//                   value={option || undefined}
+//                   onChanged={(value) =>
+//                     updateOption(questionIndex, optionIndex, value)
+//                   }
+//                   placeholder={`Option ${optionIndex + 1}`}
+//                 />
 //                 {question.options && (
 //                   <>
-//                     {index === 0 ? null : question.options?.length === 4 &&
-//                       index >= 1 &&
-//                       index <= 3 ? (
-//                       <MinusIcon />
-//                     ) : question.options.length < 4 ? (
-//                       <PlusIcon />
-//                     ) : (
-//                       index === 2 &&
-//                       question.options.length === 2 && <PlusIcon />
+//                     {optionIndex === 0 ? null : (
+//                       <>
+//                         {optionIndex === OPTION_LIMIT - 1 ? (
+//                           <MinusIcon
+//                             onClick={() =>
+//                               removeOption(questionIndex, optionIndex)
+//                             }
+//                           />
+//                         ) : (
+//                           <>
+//                             {optionIndex < question.options.length - 1 && (
+//                               <MinusIcon
+//                                 onClick={() =>
+//                                   removeOption(questionIndex, optionIndex)
+//                                 }
+//                               />
+//                             )}
+//                           </>
+//                         )}
+//                       </>
 //                     )}
+//                     {optionIndex === question.options.length - 1 &&
+//                       optionIndex !== OPTION_LIMIT - 1 && (
+//                         <PlusIcon onClick={() => addOption(questionIndex)} />
+//                       )}
 //                   </>
 //                 )}
 //               </div>
@@ -130,10 +137,27 @@
 //         ) : (
 //           <>{inputFieldMapping[question?.category]}</>
 //         )}
+//         <CardFooter className="flex justify-between items-center pt-3">
+//           <div onClick={(e: any) => deleteQuestion(e, questionIndex)}>
+//             <DeleteIcon className="text-red-500 cursor-pointer" />
+//           </div>
+//           <div className="flex items-center space-x-2">
+//             <Label
+//               htmlFor={`required-${questionIndex}`}
+//               className="font-normal text-xs"
+//             >
+//               Required
+//             </Label>
+//             <Switch
+//               checked={question?.required}
+//               id={`required-${questionIndex}`}
+//               onCheckedChange={() => toggleRequired(questionIndex)}
+//             />
+//           </div>
+//         </CardFooter>
 //       </CardContent>
 //     </Card>
 //   );
 // }
 
-// const FormBuilderQuestions = React.memo(FormBuilderQuestionsComp);
 // export default FormBuilderQuestions;

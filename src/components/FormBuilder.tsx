@@ -1,7 +1,6 @@
 import { useUserContext } from "@/store/userStore";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import DragIcon from "@/components/icons/DragIcon";
-
 import {
   Card,
   CardContent,
@@ -10,9 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import PlusIcon from "@/components/icons/PlusIcon";
-import { iconMapping, inputFieldMapping } from "@/lib/utils";
+import { iconMapping, inputFieldMapping, OPTION_LIMIT } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import MinusIcon from "@/components/icons/MinusIcon";
 import CustomInput from "@/components/customInput";
@@ -25,153 +23,93 @@ import useAddQuestion from "@/app/hooks/useAddQuestion";
 
 function FormBuilder() {
   const { formBuilderData, setFormBuilderData, scrollRef } = useUserContext();
-
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const draggedIndex = useRef<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
-  const handleDragStart = useCallback((index: number) => {
-    setDraggedIndex(index);
-  }, []);
-
-  const handleDragOver = useCallback((e: React.DragEvent, index: number) => {
-    e.preventDefault();
-    setHoveredIndex(index);
-  }, []);
-
-  const handleDragLeave = useCallback(
-    (e: React.DragEvent, index: number) => {
-      e.preventDefault();
-      setHoveredIndex(null);
-      if (draggedIndex === null || draggedIndex === index) return;
-
-      const updatedCards = [...formBuilderData.questions];
-      const [draggedCard] = updatedCards.splice(draggedIndex, 1);
-      updatedCards.splice(index, 0, draggedCard);
-      setFormBuilderData((prev) => ({ ...prev, questions: updatedCards }));
-    },
-    [draggedIndex, setFormBuilderData, formBuilderData.questions]
-  );
-
-  const handleDrop = useCallback(() => {
-    setDraggedIndex(null);
-    setHoveredIndex(null);
-  }, []);
-
-  const addOption = useCallback(
-    (questionIndex: number) => {
-      const updatedQuestions = [...formBuilderData.questions];
-      const question = updatedQuestions[questionIndex];
-      if (!question.options) return;
-      if (question.options.length < 4) {
-        question.options.push(undefined); // Add an empty option
-        setFormBuilderData((prev) => ({
-          ...prev,
-          questions: updatedQuestions,
-        }));
-      }
-    },
-    [formBuilderData, setFormBuilderData]
-  );
-
-  const removeOption = useCallback(
-    (questionIndex: number, optionIndex: number) => {
-      const updatedQuestions = [...formBuilderData.questions];
-      const question = updatedQuestions[questionIndex];
-      if (!question.options) return;
-      if (question.options.length > 1) {
-        question.options.splice(optionIndex, 1);
-        setFormBuilderData((prev) => ({
-          ...prev,
-          questions: updatedQuestions,
-        }));
-      }
-    },
-    [formBuilderData, setFormBuilderData]
-  );
-
-  const deleteQuestion = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>, questionIndex: number) => {
-      e.stopPropagation();
-      const updatedQuestions = formBuilderData.questions.filter(
-        (_, index) => index !== questionIndex
-      );
-      setFormBuilderData((prev) => ({
-        ...prev,
-        questions: updatedQuestions,
-      }));
-    },
-    [formBuilderData, setFormBuilderData]
-  );
-
-  const toggleRequired = useCallback(
-    (questionIndex: number) => {
-      const updatedQuestions = [...formBuilderData.questions];
-      updatedQuestions[questionIndex].required =
-        !updatedQuestions[questionIndex].required;
-      setFormBuilderData((prev) => ({
-        ...prev,
-        questions: updatedQuestions,
-      }));
-    },
-    [formBuilderData, setFormBuilderData]
-  );
-
-  const updateQuestionField = useCallback(
-    <K extends keyof questionType>(
-      questionIndex: number,
-      field: K,
-      value: questionType[K]
-    ) => {
-      const updatedQuestions = [...formBuilderData.questions];
-      updatedQuestions[questionIndex][field] = value; // Dynamically update the field
-      setFormBuilderData((prev) => ({
-        ...prev,
-        questions: updatedQuestions,
-      }));
-    },
-    [formBuilderData.questions, setFormBuilderData]
-  );
-
-  const updateOption = useCallback(
-    (questionIndex: number, optionIndex: number, value: string) => {
-      const updatedQuestions = [...formBuilderData.questions];
-      const question = updatedQuestions[questionIndex];
-
-      if (question.options) {
-        question.options[optionIndex] = value; // Update the specific option
-      }
-
-      setFormBuilderData((prev) => ({
-        ...prev,
-        questions: updatedQuestions,
-      }));
-    },
-    [formBuilderData.questions, setFormBuilderData]
-  );
   const [draggedOverFormBuilder, setDraggedOverFormBuilder] =
     useState<boolean>(false);
-  const handleDragoverFormBuilder = useCallback((e: React.DragEvent) => {
+
+  // drag-drop to reorder
+
+  const handleDragStart = useCallback((index: number) => {
+    draggedIndex.current = index;
+  }, []);
+
+  const handleDragOver = useCallback(
+    (e: React.DragEvent, index: number) => {
+      e.preventDefault();
+      if (hoveredIndex !== index) {
+        setHoveredIndex(index);
+      }
+    },
+    [hoveredIndex]
+  );
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setHoveredIndex(null);
+  }, []);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent, index: number) => {
+      e.preventDefault();
+
+      if (draggedIndex.current === null || draggedIndex.current === index) {
+        draggedIndex.current = null;
+        setHoveredIndex(null);
+        return;
+      }
+
+      const updatedQuestions = [...formBuilderData.questions];
+      const [draggedQuestion] = updatedQuestions.splice(
+        draggedIndex.current,
+        1
+      );
+      updatedQuestions.splice(index, 0, draggedQuestion);
+
+      setFormBuilderData((prev) => ({ ...prev, questions: updatedQuestions }));
+      draggedIndex.current = null;
+      setHoveredIndex(null);
+    },
+    [draggedIndex, formBuilderData.questions, setFormBuilderData]
+  );
+
+  // update form data
+
+  const {
+    addOption,
+    deleteQuestion,
+    toggleRequired,
+    removeOption,
+    updateOption,
+    updateQuestionField,
+  } = useAddQuestion();
+
+  // drag-drp form inner
+
+  const handleDragoverFormBuilder = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    if (draggedIndex) return;
+
     setDraggedOverFormBuilder(true);
   }, []);
   const { handleAddQuestion } = useAddQuestion();
 
   const handleDragLeaveFormBuilder = useCallback((e: React.DragEvent) => {
     e.preventDefault();
+
     setDraggedOverFormBuilder(false);
   }, []);
   const handleDropFormBuilder = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
-      if (draggedIndex) return;
+
       const category = e.dataTransfer.getData("text/plain");
       if (category) {
         handleAddQuestion(category as questionType["category"]);
       }
       setDraggedOverFormBuilder(false);
     },
-    [handleAddQuestion, draggedIndex]
+    [handleAddQuestion]
   );
 
   return (
@@ -179,31 +117,38 @@ function FormBuilder() {
       onDragOver={handleDragoverFormBuilder}
       onDragLeave={handleDragLeaveFormBuilder}
       onDrop={handleDropFormBuilder}
-      className={`h-full max-h-[calc(100vh-105px)] overflow-y-auto flex flex-col items-center gap-5 hide-scrollbar ${
+      className={`h-full max-h-[calc(100vh-106px)] overflow-y-auto flex flex-col items-center gap-5 hide-scrollbar ${
         draggedOverFormBuilder && "border border-peerlistGreen"
-      } max-md:p-2 p-6 justify-start`}
+      } max-md:p-2 max-md:py-5 p-6 justify-start`}
     >
       {formBuilderData.questions.map((question, questionIndex) => (
         <Card
+          // ref={
+          //   questionIndex == formBuilderData.questions.length - 1
+          //     ? scrollRef
+          //     : null
+          // }
           draggable
           onDragStart={() => handleDragStart(questionIndex)}
           onDragOver={(e) => handleDragOver(e, questionIndex)}
-          onDragLeave={(e) => handleDragLeave(e, questionIndex)}
-          onDrop={handleDrop}
-          key={question.position}
-          className={`w-full transition-all ${
+          onDragLeave={handleDragLeave}
+          onDrop={(e) => handleDrop(e, questionIndex)}
+          key={question.id + Math.random()}
+          className={`w-full ${
             hoveredIndex === questionIndex
-              ? "border-peerlistGreen shadow-lg"
-              : "border"
+              ? "border-peerlistGreen border-spacing-0.5"
+              : "border-spacing-0.5"
           }`}
         >
           <CardHeader>
-            <CardTitle className="flex items-center gap-4">
+            <CardTitle className="flex items-start gap-4">
               <CustomInput
+                aria-label="question title"
+                value={question.title}
                 onChanged={(value) =>
                   updateQuestionField(questionIndex, "title", value)
                 }
-                placeholder={question?.title}
+                placeholder={"Write a question"}
                 variant={"title"}
               />
               <div className="flex gap-1">
@@ -219,12 +164,13 @@ function FormBuilder() {
             </CardTitle>
             <CardDescription>
               <CustomInput
+                aria-label="question helpText"
+                value={question.helpText}
                 variant={"helpText"}
                 onChanged={(value) =>
-                  updateQuestionField(questionIndex, "title", value)
+                  updateQuestionField(questionIndex, "helpText", value)
                 }
                 placeholder={
-                  question?.helpText ||
                   "Write a help text or caption (leave empty if not needed)."
                 }
               />
@@ -235,7 +181,7 @@ function FormBuilder() {
               <RadioGroup>
                 {question.options?.map((option, optionIndex) => (
                   <div
-                    key={optionIndex}
+                    key={optionIndex + Math.random()}
                     className={`${
                       !option && "text-muted-foreground"
                     } flex items-center space-x-2`}
@@ -245,22 +191,39 @@ function FormBuilder() {
                       id={option || `Option ${optionIndex + 1}`}
                     />
                     <CustomInput
+                      aria-label="options"
+                      className="after:left-1.5 md:text-sm"
+                      value={option || undefined}
                       onChanged={(value) =>
                         updateOption(questionIndex, optionIndex, value)
                       }
-                      placeholder={option || `Option ${optionIndex + 1}`}
+                      placeholder={`Option ${optionIndex + 1}`}
                     />
                     {question.options && (
                       <>
                         {optionIndex === 0 ? null : (
-                          <MinusIcon
-                            onClick={() =>
-                              removeOption(questionIndex, optionIndex)
-                            }
-                          />
+                          <>
+                            {optionIndex === OPTION_LIMIT - 1 ? (
+                              <MinusIcon
+                                onClick={() =>
+                                  removeOption(questionIndex, optionIndex)
+                                }
+                              />
+                            ) : (
+                              <>
+                                {optionIndex < question.options.length - 1 && (
+                                  <MinusIcon
+                                    onClick={() =>
+                                      removeOption(questionIndex, optionIndex)
+                                    }
+                                  />
+                                )}
+                              </>
+                            )}
+                          </>
                         )}
                         {optionIndex === question.options.length - 1 &&
-                          optionIndex !== 3 && (
+                          optionIndex !== OPTION_LIMIT - 1 && (
                             <PlusIcon
                               onClick={() => addOption(questionIndex)}
                             />
@@ -294,8 +257,8 @@ function FormBuilder() {
           </CardContent>
         </Card>
       ))}
-      {formBuilderData.questions.length <= 3 && <AddQuestions />}
-      <div className="m-0" ref={scrollRef}></div>
+      {formBuilderData.questions.length <= 2 && <AddQuestions />}
+      <div ref={scrollRef} />
     </div>
   );
 }

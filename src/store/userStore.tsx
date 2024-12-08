@@ -1,4 +1,6 @@
 "use client";
+
+import { submissions } from "@/components/SetSession";
 import { formType } from "@/types/types";
 import React, {
   createContext,
@@ -7,12 +9,15 @@ import React, {
   useContext,
   useMemo,
   useRef,
+  useState,
 } from "react";
 
 interface UserContextType {
   formBuilderData: formType;
   setFormBuilderData: React.Dispatch<SetStateAction<formType>>;
-  scrollRef: React.MutableRefObject<HTMLDivElement>;
+  scrollRef: React.MutableRefObject<HTMLDivElement | null>;
+  formSubmission: submissions[];
+  setFormSubmission: React.Dispatch<SetStateAction<submissions[]>>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -28,17 +33,29 @@ const useUserContext = (): UserContextType => {
 const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [formBuilderData, setFormBuilderData] = React.useState<formType>({
     form_title: "Untitled Form",
-    questions: [],
+    questions: [
+      //@ts-expect-error: ignore _id for initial
+      {
+        id: 1,
+        category: "long_answer",
+        title: undefined,
+        helpText: undefined,
+        required: true,
+      },
+    ],
   });
+  const [formSubmission, setFormSubmission] = useState<any[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const value = useMemo(
     () => ({
+      formSubmission,
+      setFormSubmission,
       scrollRef,
       formBuilderData,
       setFormBuilderData,
     }),
-    [formBuilderData]
+    [formBuilderData, formSubmission]
   );
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

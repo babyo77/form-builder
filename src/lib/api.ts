@@ -25,7 +25,7 @@ const handleResponse = async <T>(
   if (response.status === 404) {
     if (showErrorToast) {
       toast.error("Not Found", {
-        style: { background: "#e94625" },
+        style: { background: "#e94625", color: "white", border: "0px" },
       });
     }
     return {
@@ -52,7 +52,7 @@ const handleResponse = async <T>(
 
     if (showErrorToast) {
       toast.error(errorMessage, {
-        style: { background: "#e94625" },
+        style: { background: "#e94625", color: "white", border: "0px" },
       });
     }
     console.error("API call failed:", errorMessage);
@@ -60,7 +60,7 @@ const handleResponse = async <T>(
     return {
       success: false,
       status: response.status,
-      error: errorMessage,
+      error: error.error || errorMessage,
     };
   }
 
@@ -80,7 +80,7 @@ const handleError = (
   const errorMessage = error.message || "An error occurred";
   if (error.name !== "AbortError" && showErrorToast) {
     toast.error(errorMessage, {
-      style: { background: "#e94625" },
+      style: { background: "#e94625", color: "white", border: "0px" },
     });
   }
   console.error("API call failed:", errorMessage);
@@ -123,7 +123,7 @@ const api = {
         method,
         ...fetchOptions,
         // credentials: "include",
-        next: { revalidate: 10 },
+
         headers,
       });
 

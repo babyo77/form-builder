@@ -20,7 +20,7 @@ export function AddQuestions({
   currentQuestionIndex?: number;
   isInputField?: boolean;
 }) {
-  const { setFormBuilderData } = useUserContext();
+  const { setFormBuilderData, scrollRef } = useUserContext();
 
   const memoizedQuestionTypes = useMemo(() => questionTypes, []);
 
@@ -33,14 +33,18 @@ export function AddQuestions({
         updatedQuestions[index] = {
           ...updatedQuestions[index],
           category,
-          title: undefined,
-          helpText: undefined,
+          title: prev.questions[index].title,
+          helpText: prev.questions[index].helpText,
         };
 
         if (category === "single_select") {
           updatedQuestions[index] = {
             ...updatedQuestions[index],
-            options: [undefined, undefined],
+            options:
+              prev.questions[index].options &&
+              prev.questions[index].options?.length > 0
+                ? prev.questions[index].options
+                : [undefined, undefined],
           };
         }
 

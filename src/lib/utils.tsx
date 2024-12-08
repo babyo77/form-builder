@@ -65,7 +65,7 @@ export const inputFieldMapping: Record<questionType["category"], JSX.Element> =
         variant="nofilled"
       />
     ),
-    date: <CalenderInput />,
+    date: <CalenderInput disabled />,
   };
 
 export const questionTypes = [
@@ -80,3 +80,12 @@ export const questionTypes = [
   { category: "url", label: "URL", icon: <UrlIcon /> },
   { category: "date", label: "Date", icon: <DateIcon /> },
 ];
+
+export function areOptionsValid(options: any[]): boolean {
+  if (options.filter((option) => option === null).length == 0) {
+    return false;
+  }
+
+  return true;
+}
+export const OPTION_LIMIT = 11;
