@@ -67,8 +67,11 @@ function FormFooterComp() {
         ...prev,
         _id: res.data as any,
       }));
+      setDraft(true);
     }
-    setDraft(true);
+    if (res.error) {
+      setDraft(false);
+    }
     setLoader(false);
   }, []);
   const saveFromRealtime = useDebounce(saveForm);
@@ -95,7 +98,7 @@ function FormFooterComp() {
       {formBuilderData.questions.length >= 3 && <AddQuestions />}
       <Button
         onClick={handlePublish}
-        disabled={formBuilderData.questions.length == 0}
+        disabled={formBuilderData.questions.length == 0 || !draft}
         size="sm"
         className="gap-0.5"
         variant={!formBuilderData.publish ? "peerlist" : "destructive"}
