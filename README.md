@@ -51,8 +51,8 @@ Several challenges arose during the development process, requiring creative solu
 
 ## Contact  
 For feedback or questions, feel free to reach out:  
-- **Email**: [devisantosh504@gmail.com]  
-- **GitHub**: [https://github.com/babyo77](https://github.com/your-profile)  
+- **Email**: [Email](devisantosh504@gmail.com)  
+- **GitHub**: [Github](https://github.com/your-profile)  
 
 ## Screenshots
 
