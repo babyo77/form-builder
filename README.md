@@ -36,13 +36,19 @@ Several challenges arose during the development process, requiring creative solu
 - **Time**:managed to make a backend with caching at same time for this [Backend code](https://github.com/babyo77/form-builder-backend)
 - **Forgot**:forgot to add many thing as far as i was builing i thought of adding all features 😂
 
+### Pending
+![Status: Pending](https://img.shields.io/badge/Status-Pending-yellow)
+
+- **Drgag-drop for mobile**
+- **mobile layout fixed**
+
 ## Tech Stack  
 
 - **Frontend**: Next JS  
 - **Styling**: TailwindCSS, shadcn ui  
 - **Version Control**: Git  
-- **Hosting**: Vercel 
-
+- **Hosting**: Vercel
+- 
 
 ## Demo
 
