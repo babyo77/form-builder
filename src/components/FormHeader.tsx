@@ -40,7 +40,7 @@ function FormHeaderComp() {
           onClick={handleShare}
           disabled={!formBuilderData.publish}
           size="sm"
-          className="shadow-none gap-0.5"
+          className="shadow-none md:hidden gap-0.5"
           variant="outline"
         >
           <ShareIcon className=" size-4" />
