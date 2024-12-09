@@ -33,16 +33,7 @@ const useUserContext = (): UserContextType => {
 const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [formBuilderData, setFormBuilderData] = React.useState<formType>({
     form_title: "Untitled Form",
-    questions: [
-      //@ts-expect-error: ignore _id for initial
-      {
-        id: 1,
-        category: "long_answer",
-        title: undefined,
-        helpText: undefined,
-        required: true,
-      },
-    ],
+    questions: [],
   });
   const [formSubmission, setFormSubmission] = useState<any[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
