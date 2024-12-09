@@ -71,7 +71,7 @@ function FormFooterComp() {
         ...prev,
         _id: res.data as any,
       }));
-      setDraft(true);
+      setDraft(false);
     }
     if (res.error) {
       setDraft(false);
