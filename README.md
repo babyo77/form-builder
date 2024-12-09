@@ -11,7 +11,6 @@ The initial step was to deeply understand the project requirements:
 - Subtle animations and interactivity were required to elevate the user experience ( that i neglected 😂).  
 - A clean, professional design should drive both functionality and aesthetics ✅.
 
- 
 ### 2. **Featurs**  
 After reviewing, I moved on to conceptualizing the design:    
 - In [Assignment file](https://peerlist.notion.site/Peerlist-Frontend-Developer-Assignment-15471d3131a180b3a41ecce6e83e437b) their were lot if things that are missing also in ui but i m able to add those missing things and yes thire are more.
@@ -19,22 +18,22 @@ After reviewing, I moved on to conceptualizing the design:
 
 ### 3. **Development Phases**  
 The project was broken into clear phases for smoother execution:  
-- **Phase 1: Layout Structure**  
+- **Layout Structure**  
   Focused on building the app layout and basic HTML structure, ensuring essential content elements were in place.  
-- **Phase 2: Design Refinement and API integration**  
+- **Design Refinement and API integration**  
   Styled the layout with **TailwindCSS**, refining spacing, typography, and colors to ensure consistency with design.  
-- **Phase 3: Testing & Polishing**  
+- **Testing & Polishing**  
   Performed rigorous testing across devices to ensure responsiveness, making adjustments as needed for smaller screens or edge cases.    
 
 ### 4. **Problem-Solving During Development**  
 Several challenges arose during the development process, requiring creative solutions:  
 - **Contententeditable**:  
-  Managing the state of a Contententeditable div it most hardest part gone throughr but managed to cover with help of AI, but still there are minor fixes to be fixed.
+  Managing the state of a Contententeditable, hardest part gone through but managed to cover, but still there are minor fixes to be fixed.
 - **Drag-Drop**:First it was bit upside down as i was impleting it from scratch without using any external library at last i managed to add drap drop features    
 
 ### Other points
 
-- **Time**:maneged to make a backend with caching at same time for this [Backend code](https://github.com/babyo77/form-builder-backend)
+- **Time**:managed to make a backend with caching at same time for this [Backend code](https://github.com/babyo77/form-builder-backend)
 - **Forgot**:forgot to add many thing as far as i was builing i thought of adding all features 😂
 
 ## Tech Stack  
