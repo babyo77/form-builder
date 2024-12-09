@@ -7,6 +7,7 @@ import {
   ArrowRightIcon,
   CheckIcon,
   Columns2,
+  Github,
   Grip,
   PlusIcon,
 } from "lucide-react";
@@ -40,6 +41,9 @@ const Home = () => {
             </Link> */}
             <Link href="/create">
               <Button className="rounded-xl">Create Form</Button>
+            </Link>
+            <Link href="https://github.com/babyo77/form-builder">
+              <Github />
             </Link>
           </div>
         </div>
