@@ -19,7 +19,6 @@ export async function getSession() {
     );
 
     if (response.success) {
-      console.log(response.data);
       return response.data as any;
     }
     return null;
