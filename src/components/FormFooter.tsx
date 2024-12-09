@@ -82,7 +82,7 @@ function FormFooterComp() {
   useEffect(() => {
     setDraft(false);
     saveForm().then(() => {});
-  }, [formBuilderData.questions.d, formBuilderData.form_title]);
+  }, [formBuilderData.questions, formBuilderData.form_title]);
   return (
     <div className="bg-peerlistBackground z-10 border-t flex p-4 px-6 max-md:px-2 gap-1.5 items-center justify-between w-full">
       <Button
