@@ -17,9 +17,9 @@ export async function getSession() {
         cache: "no-cache",
       }
     );
-    console.log(response.status);
 
     if (response.success) {
+      console.log(response.data);
       return response.data as any;
     }
     return null;
