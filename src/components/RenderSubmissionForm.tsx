@@ -71,6 +71,7 @@ function RenderSubmissionForm({
           const errorIds = new Set(
             validate.errors.map((error) => error.id).filter((id) => id)
           );
+          console.error(validate.errors);
 
           setError(errorIds);
           return;
