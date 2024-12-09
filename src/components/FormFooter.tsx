@@ -84,7 +84,7 @@ function FormFooterComp() {
     saveForm().then(() => {});
   }, [formBuilderData.questions, formBuilderData.form_title]);
   return (
-    <div className="bg-peerlistBackground z-10 border-t border-b-0 flex p-4 px-6 max-md:px-2 gap-1.5 items-center justify-between w-full">
+    <div className="bg-peerlistBackground z-10 border-t border-b-0 flex p-4 px-6 max-md:px-2 gap-1.5 max-md:fixed max-md:bottom-0 backdrop-blur-lg max-md:bg-white  items-center justify-between w-full">
       <Button
         onClick={saveForm}
         disabled={loader || formBuilderData.questions.length == 0 || draft}
