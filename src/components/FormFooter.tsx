@@ -37,7 +37,7 @@ function FormFooterComp() {
       }));
       toast.success((res.data as any).message, {
         style: {
-          backgroundColor: !(res.data as any).publish ? "#e94625" : "#00AA45",
+          backgroundColor: "#00AA45",
           color: "#FFFFFF",
         },
       });

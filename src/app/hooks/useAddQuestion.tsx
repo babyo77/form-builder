@@ -2,6 +2,7 @@ import { OPTION_LIMIT } from "@/lib/utils";
 import { useUserContext } from "@/store/userStore";
 import { questionType } from "@/types/types";
 import { useCallback } from "react";
+import { toast } from "sonner";
 
 function useAddQuestion() {
   const { setFormBuilderData, scrollRef, formBuilderData } = useUserContext();
@@ -143,6 +144,22 @@ function useAddQuestion() {
     [formBuilderData.questions, setFormBuilderData]
   );
 
+  const handleShare = async () => {
+    if (!formBuilderData.publish) return;
+    try {
+      const url = window.location.origin + "/form/" + formBuilderData._id;
+      if (navigator.share) {
+        await navigator.share({ url });
+        toast.success("Shared the link successfully!");
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast.success("Link copied to clipboard!");
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   return {
     handleAddQuestion,
     addOption,
@@ -151,6 +168,7 @@ function useAddQuestion() {
     removeOption,
     updateOption,
     updateQuestionField,
+    handleShare,
   };
 }
 

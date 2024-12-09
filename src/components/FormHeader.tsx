@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import CustomInput from "@/components/customInput";
 import { useUserContext } from "@/store/userStore";
 import Link from "next/link";
+import { ShareIcon } from "lucide-react";
+import useAddQuestion from "@/app/hooks/useAddQuestion";
 function FormHeaderComp() {
   const { formBuilderData, setFormBuilderData } = useUserContext();
   const handleUpdate = useCallback(
@@ -12,6 +14,7 @@ function FormHeaderComp() {
     },
     [setFormBuilderData]
   );
+  const { handleShare } = useAddQuestion();
   return (
     <div className="border-b border-t-0  max-md:fixed max-md:top-0 backdrop-blur-lg bg-white z-10 flex p-2 max-md:px-2 px-6 gap-4 items-start justify-between w-full">
       <CustomInput
@@ -21,17 +24,28 @@ function FormHeaderComp() {
         variant={"title"}
         placeholder={"Untitled form"}
       />
-      <Link href={"/preview"} target="_blank">
+      <div className=" flex items-center gap-1">
+        <Link href={"/preview"} target="_blank">
+          <Button
+            disabled={formBuilderData.questions.length == 0}
+            size="sm"
+            className="shadow-none gap-0.5"
+            variant="outline"
+          >
+            <p>Preview</p>
+            <RightArrow />
+          </Button>
+        </Link>
         <Button
-          disabled={formBuilderData.questions.length == 0}
+          onClick={handleShare}
+          disabled={!formBuilderData.publish}
           size="sm"
           className="shadow-none gap-0.5"
           variant="outline"
         >
-          <p>Preview</p>
-          <RightArrow />
+          <ShareIcon className=" size-4" />
         </Button>
-      </Link>
+      </div>
     </div>
   );
 }

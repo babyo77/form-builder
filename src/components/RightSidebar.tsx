@@ -2,26 +2,11 @@ import { Heading } from "@/components/typography/heading";
 import { Paragraph } from "./typography/paragraph";
 import Image from "next/image";
 import { useUserContext } from "@/store/userStore";
-import { toast } from "sonner";
 const colors = ["text-red-500", "text-green-500", "text-purple-500"];
 
 function RightSidebar() {
   const { formBuilderData, formSubmission } = useUserContext();
-  const handleShare = async () => {
-    if (!formBuilderData.publish) return;
-    try {
-      const url = window.location.origin + "/form/" + formBuilderData._id;
-      if (navigator.share) {
-        await navigator.share({ url });
-        toast.success("Shared the link successfully!");
-      } else {
-        await navigator.clipboard.writeText(url);
-        toast.success("Link copied to clipboard!");
-      }
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
+  const { handleShare } = useAddQuestion();
   return (
     <div className="col-span-1 max-md:hidden max-lg:hidden h-full w-full flex p-4 items-start justify-start flex-col gap-4">
       <Heading size="tiny" className="px-1 font-semibold">
@@ -95,6 +80,7 @@ function RightSidebar() {
 
 import { useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
+import useAddQuestion from "@/app/hooks/useAddQuestion";
 
 interface ClipboardCopyProps {
   formId: string;
