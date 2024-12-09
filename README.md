@@ -39,8 +39,8 @@ Several challenges arose during the development process, requiring creative solu
 ### Pending
 ![Status: Pending](https://img.shields.io/badge/Status-Pending-yellow)
 
-- **Drgag-drop for mobile**
-- **mobile layout fixed**
+- **Drgag-drop mobile**
+- **Seo**
 
 ## Tech Stack  
 
