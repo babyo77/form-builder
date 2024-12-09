@@ -126,7 +126,7 @@ function RenderSubmissionForm({
       {/* left sidebar */}
       <div className="col-span-1 max-lg:hidden max-md:hidden" />
 
-      <div className="col-span-2 max-lg:col-span-4 flex flex-col justify-between border h-full">
+      <div className="col-span-2 max-lg:col-span-4 flex flex-col justify-between border border-t-0 border-b-0 h-full">
         {/* Header */}
         <div className="border-b  border-t-0 flex p-2 max-md:px-2 px-6 gap-4 items-center justify-between w-full">
           <Heading size="tiny" className=" font-semibold text-sm text-black">
