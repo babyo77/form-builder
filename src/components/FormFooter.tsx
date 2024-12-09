@@ -78,10 +78,10 @@ function FormFooterComp() {
     }
     setLoader(false);
   }, [setFormBuilderData, formBuilderData]);
-  const saveFromRealtime = useDebounce(saveForm);
+  // const saveFromRealtime = useDebounce(saveForm);
   useEffect(() => {
     setDraft(false);
-    saveFromRealtime();
+    saveForm().then(() => {});
   }, [formBuilderData.questions]);
   return (
     <div className="bg-peerlistBackground z-10 border-t flex p-4 px-6 max-md:px-2 gap-1.5 items-center justify-between w-full">
@@ -97,7 +97,7 @@ function FormFooterComp() {
         ) : (
           <DraftIcon />
         )}
-        Save as Draft
+        Save changes
       </Button>
       {formBuilderData.questions.length >= 3 && <AddQuestions />}
       <Button
