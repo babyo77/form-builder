@@ -28,7 +28,7 @@ export default async function RootLayout({
 }>) {
   const user = await getSession();
   return (
-    <html lang="en">
+    <html lang="en" className=" overflow-hidden">
       <body className={`${inter.className} antialiased`}>
         <UserProvider>
           <SetSession user={user} />
