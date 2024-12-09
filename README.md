@@ -68,8 +68,8 @@ For feedback or questions, feel free to reach out:
 ![App Screenshot](https://us-east-1.tixte.net/uploads/tanmay111-files.tixte.co/Screenshot_2024-12-09_at_7.14.18%E2%80%AFAM.png)
 
 
-![Logo](https://frombuilder.vercel.app/favicon.ico)
-
-<p align="left">
+![Logo](https://frombuilder.vercel.app/favicon.ico) <p align="left">
   <img src="https://visitor-badge.laobi.icu/badge?page_id=babyo77.form-builder" alt="Visitors">
 </p>
+
+
