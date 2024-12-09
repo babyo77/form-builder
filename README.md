@@ -65,3 +65,4 @@ For feedback or questions, feel free to reach out:
 
 ![Logo](https://frombuilder.vercel.app/favicon.ico)
 
+[![Visits Badge](https://badges.pufler.dev/visits/babyo77/form-builder)](https://badges.pufler.dev)
