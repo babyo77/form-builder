@@ -23,11 +23,11 @@ const inputVariants = cva(
       variant: {
         default: "",
         title:
-          "border-none rounded-none font-semibold shadow-none outline-none focus-visible:ring-0 text-muted-foreground  max-md:text-sm",
+          "border-none rounded-none font-semibold shadow-none outline-none focus-visible:ring-0 text-muted-foreground max-md:text-sm",
         helpText:
           "border-none rounded-none text-xs md:text-sm shadow-none outline-none focus-visible:ring-0",
         notFilled:
-          "text-xs px-2 py-1.5  shadow-none outline-none focus-visible:ring-0",
+          "text-xs px-2 py-1.5 shadow-none outline-none focus-visible:ring-0",
       },
     },
     defaultVariants: {
@@ -46,18 +46,14 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
       value: propValue,
       ...props
     },
-    //@ts-check
     ref
   ) => {
-    // Local state for immediate editing
     const [localValue, setLocalValue] = useState(propValue || "");
-    // State to track the last confirmed value
     const [confirmedValue, setConfirmedValue] = useState(propValue || "");
     const [isFocused, setIsFocused] = useState(false);
     const inputRef = useRef<HTMLDivElement>(null);
-    const lastCaretPositionRef = useRef<number>(0);
+    const caretPositionRef = useRef<number>(0);
 
-    // Save cursor position before input changes
     const saveCaretPosition = useCallback(() => {
       if (inputRef.current) {
         const selection = window.getSelection();
@@ -66,44 +62,38 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
           const preCaretRange = range.cloneRange();
           preCaretRange.selectNodeContents(inputRef.current);
           preCaretRange.setEnd(range.endContainer, range.endOffset);
-          lastCaretPositionRef.current = preCaretRange.toString().length;
+          caretPositionRef.current = preCaretRange.toString().length;
         }
       }
     }, []);
 
-    // Restore cursor position after content update
-    const restoreCaretPosition = useCallback((position: number) => {
+    const restoreCaretPosition = useCallback(() => {
       if (inputRef.current) {
         const selection = window.getSelection();
         const range = document.createRange();
-
         let currentOffset = 0;
 
-        // Traverse through text nodes to find the correct position
         const traverseNodes = (
           node: Node
         ): { node: Node; offset: number } | null => {
           if (node.nodeType === Node.TEXT_NODE) {
             const nodeLength = node.textContent?.length || 0;
-            if (currentOffset + nodeLength >= position) {
+            if (currentOffset + nodeLength >= caretPositionRef.current) {
               return {
                 node,
-                offset: position - currentOffset,
+                offset: caretPositionRef.current - currentOffset,
               };
             }
             currentOffset += nodeLength;
           }
-
           for (let i = 0; i < node.childNodes.length; i++) {
             const result = traverseNodes(node.childNodes[i]);
             if (result) return result;
           }
-
           return null;
         };
 
         const caretInfo = traverseNodes(inputRef.current);
-
         if (caretInfo && selection) {
           range.setStart(caretInfo.node, caretInfo.offset);
           range.collapse(true);
@@ -113,37 +103,28 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
       }
     }, []);
 
-    // Handle input changes
     const handleInputChange = useCallback(
       (e: React.FormEvent<HTMLDivElement>) => {
-        // Save current caret position before updating
         saveCaretPosition();
-
         const newValue = e.currentTarget.textContent || "";
-
-        // Update local value for immediate editing
         setLocalValue(newValue);
-
-        // Restore caret position in next render cycle
-        setTimeout(() => {
-          restoreCaretPosition(lastCaretPositionRef.current);
-        }, 0);
       },
-      [saveCaretPosition, restoreCaretPosition]
+      [saveCaretPosition]
     );
 
-    // Handle blur to confirm value
     const handleBlur = useCallback(() => {
       setIsFocused(false);
-
-      // Only trigger onChanged if the value has actually changed
       if (localValue !== confirmedValue) {
         onChanged?.(localValue);
         setConfirmedValue(localValue);
       }
     }, [localValue, confirmedValue, onChanged]);
 
-    // Sync prop value with confirmed value
+    const handleFocus = useCallback(() => {
+      setIsFocused(true);
+      restoreCaretPosition();
+    }, [restoreCaretPosition]);
+
     useEffect(() => {
       if (propValue !== undefined && propValue !== confirmedValue) {
         setLocalValue(propValue);
@@ -151,9 +132,11 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
       }
     }, [propValue, confirmedValue]);
 
-    const handleFocus = useCallback(() => {
-      setIsFocused(true);
-    }, []);
+    useEffect(() => {
+      if (isFocused) {
+        restoreCaretPosition();
+      }
+    }, [localValue, restoreCaretPosition, isFocused]);
 
     return (
       <div
@@ -165,17 +148,11 @@ const CustomInput = forwardRef<HTMLDivElement, CustomInputProps>(
         data-placeholder={placeholder}
         className={cn(
           inputVariants({ variant }),
-
-          "relative", // For placeholder positioning
-          "break-words", // Ensure word wrapping
-          "whitespace-pre-wrap", // Preserve line breaks
+          "relative break-words whitespace-pre-wrap",
           isFocused || localValue.trim().length > 0
             ? "text-black"
             : "text-muted-foreground",
-
-          // Improved placeholder positioning
           "after:absolute after:top-1/2 after:-translate-y-1/2 after:left-0 after:text-muted-foreground after:pointer-events-none after:opacity-50",
-          // Use after pseudo-element for placeholder when empty
           !localValue && `after:content-[attr(data-placeholder)]`,
           className
         )}
