@@ -39,8 +39,8 @@ Several challenges arose during the development process, requiring creative solu
 ### Pending
 ![Status: Pending](https://img.shields.io/badge/Status-Pending-yellow)
 
-- **Drgag-drop for mobile**
-- **mobile layout fixed**
+- **Drgag-drop mobile**
+- **Seo**
 
 ## Tech Stack  
 
@@ -68,6 +68,8 @@ For feedback or questions, feel free to reach out:
 ![App Screenshot](https://us-east-1.tixte.net/uploads/tanmay111-files.tixte.co/Screenshot_2024-12-09_at_7.14.18%E2%80%AFAM.png)
 
 
-![Logo](https://frombuilder.vercel.app/favicon.ico)
+![Logo](https://frombuilder.vercel.app/favicon.ico) <p align="left">
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=babyo77.form-builder" alt="Visitors">
+</p>
 
-[![Visits Badge](https://badges.pufler.dev/visits/babyo77/form-builder)](https://badges.pufler.dev)
+
