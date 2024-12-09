@@ -47,8 +47,7 @@ Several challenges arose during the development process, requiring creative solu
 - **Frontend**: Next JS  
 - **Styling**: TailwindCSS, shadcn ui  
 - **Version Control**: Git  
-- **Hosting**: Vercel
-- 
+- **Hosting**: Vercel 
 
 ## Demo
 
