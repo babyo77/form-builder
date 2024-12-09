@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 import { UserProvider } from "@/store/userStore";
+import { getSession } from "@/actions/getSession";
+import SetSession from "@/components/SetSession";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,10 +19,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getSession();
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <UserProvider>{children}</UserProvider>
+        <UserProvider>
+          <SetSession user={user} />
+          {children}
+        </UserProvider>
         <Toaster
           position="bottom-right"
           toastOptions={{
