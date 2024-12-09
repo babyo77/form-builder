@@ -9,7 +9,7 @@ function CreateFrom() {
   return (
     <main className="w-full h-screen overflow-hidden max-sm:px-0 max-lg:px-0  max-md:px-0 border max-xs:px-0 max-xl:px-0 max-2xl:px-24 grid-cols-1 grid md:grid-cols-4 items-center justify-center">
       <LeftSidebar />
-      <div className="col-span-2 flex flex-col justify-between border h-full">
+      <div className="col-span-2 max-lg:col-span-4 flex flex-col justify-between border h-full">
         {/* Header */}
         <FormHeader />
 

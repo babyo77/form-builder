@@ -123,9 +123,9 @@ function RenderSubmissionForm({
   return (
     <main className="w-full h-screen overflow-hidden max-sm:px-0 max-lg:px-0  max-md:px-0 border max-xs:px-0 max-xl:px-0 max-2xl:px-24 grid-cols-1 grid md:grid-cols-4 items-center justify-center">
       {/* left sidebar */}
-      <div className="col-span-1 max-md:hidden" />
+      <div className="col-span-1 max-lg:hidden max-md:hidden" />
 
-      <div className="col-span-2 flex flex-col justify-between border h-full">
+      <div className="col-span-2 max-lg:col-span-4 flex flex-col justify-between border h-full">
         {/* Header */}
         <div className="border-b  flex p-2 max-md:px-2 px-6 gap-4 items-center justify-between w-full">
           <Heading size="tiny" className=" font-semibold text-sm text-black">
@@ -239,7 +239,7 @@ function RenderSubmissionForm({
       </div>
 
       {/* right sidebar */}
-      <div className="col-span-1 max-md:hidden" />
+      <div className="col-span-1 max-lg:hidden max-md:hidden" />
     </main>
   );
 }

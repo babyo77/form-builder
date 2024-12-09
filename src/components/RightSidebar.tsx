@@ -23,7 +23,7 @@ function RightSidebar() {
     }
   };
   return (
-    <div className="col-span-1 max-md:hidden h-full w-full flex p-4 items-start justify-start flex-col gap-4">
+    <div className="col-span-1 max-md:hidden max-lg:hidden h-full w-full flex p-4 items-start justify-start flex-col gap-4">
       <Heading size="tiny" className="px-1 font-semibold">
         Form submissions 🗂️
       </Heading>

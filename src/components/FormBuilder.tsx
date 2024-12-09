@@ -117,9 +117,9 @@ function FormBuilder() {
       onDragOver={handleDragoverFormBuilder}
       onDragLeave={handleDragLeaveFormBuilder}
       onDrop={handleDropFormBuilder}
-      className={`h-full max-h-[calc(100vh-106px)] overflow-y-auto flex flex-col items-center gap-5 hide-scrollbar ${
+      className={`h-full  max-h-[calc(100vh-106px)] overflow-y-auto flex flex-col items-center gap-5 hide-scrollbar ${
         draggedOverFormBuilder && "border border-peerlistGreen"
-      } max-md:p-2 max-md:py-5 p-6 justify-start`}
+      } max-md:p-2 max-md:py-5  p-6 justify-start`}
     >
       {formBuilderData.questions.map((question, questionIndex) => (
         <Card
