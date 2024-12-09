@@ -24,6 +24,7 @@ export default function DatePicker({
   onChange,
   ...props
 }: DatePickerProps) {
+  const closeRef = React.useRef<HTMLButtonElement>(null);
   const [date, setDate] = React.useState<Date>();
   React.useEffect(() => {
     if (defaultValue && typeof defaultValue === "string") {
@@ -35,6 +36,7 @@ export default function DatePicker({
   const handleDateChange = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
     if (onChange) {
+      closeRef.current?.click();
       // Format the date to MM-DD-YYYY and pass it as e.target.value
       const formattedDate = selectedDate
         ? format(selectedDate, "MM-dd-yyyy")
@@ -79,15 +81,14 @@ export default function DatePicker({
             <DateIcon />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="end">
-          <PopoverClose>
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={handleDateChange}
-              initialFocus
-            />
-          </PopoverClose>
+        <PopoverContent className="w-auto p-0" align="start">
+          <PopoverClose ref={closeRef} />
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={handleDateChange}
+            initialFocus
+          />
         </PopoverContent>
       </Popover>
     </div>
