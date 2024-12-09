@@ -106,11 +106,15 @@ function RenderSubmissionForm({
       (value) => value.trim() !== ""
     ).length;
 
-    const progressPercentage = Math.round(
-      (answeredCount / data.questions.length) * 100
-    );
+    const max = data.questions.filter(
+      (item) =>
+        item.options &&
+        item.options.filter((option) => option === null).length == 0
+    ).length;
+
+    const progressPercentage = Math.round((answeredCount / max) * 100);
     setProgress(progressPercentage);
-  }, [formData, data.questions.length]);
+  }, [formData, data.questions]);
 
   useEffect(() => {
     calculateProgress();
