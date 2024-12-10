@@ -72,7 +72,7 @@ export default function DatePicker({
           >
             <input
               {...props}
-              className=" outline-none cursor-pointer select-none font-normal bg-transparent"
+              className=" outline-none cursor-pointer select-none font-normal  max-md:text-xs bg-transparent"
               value={date ? format(date, "MM-dd-yyyy") : "MM-DD-YYYY"}
               type="text"
               readOnly
