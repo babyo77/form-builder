@@ -122,7 +122,7 @@ function RenderSubmissionForm({
   }, [formData, calculateProgress]);
 
   return (
-    <main className="w-full h-screen overflow-hidden max-sm:px-0 max-lg:px-0  max-md:px-0  max-xs:px-0 max-xl:px-0 max-2xl:px-24 grid-cols-1 grid md:grid-cols-4 items-center justify-center">
+    <>
       {/* left sidebar */}
       <div className="col-span-1 max-lg:hidden max-md:hidden" />
 
@@ -241,7 +241,7 @@ function RenderSubmissionForm({
 
       {/* right sidebar */}
       <div className="col-span-1 max-lg:hidden max-md:hidden" />
-    </main>
+    </>
   );
 }
 

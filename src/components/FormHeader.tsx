@@ -16,7 +16,7 @@ function FormHeaderComp() {
   );
   const { handleShare } = useAddQuestion();
   return (
-    <div className="border-b border-t-0  max-md:fixed max-md:top-0 backdrop-blur-lg bg-white z-10 flex p-2 max-md:px-2 px-6 gap-4 items-start justify-between w-full">
+    <div className="border-b border-t-0 max-md:top-0 backdrop-blur-lg bg-white z-10 flex p-2 max-md:px-2 px-6 gap-4 items-start justify-between w-full">
       <CustomInput
         aria-label="form title"
         value={formBuilderData?.form_title}

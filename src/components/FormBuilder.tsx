@@ -1,5 +1,5 @@
 import { useUserContext } from "@/store/userStore";
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import DragIcon from "@/components/icons/DragIcon";
 import {
   Card,
@@ -20,58 +20,25 @@ import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
 import { questionType } from "@/types/types";
 import useAddQuestion from "@/app/hooks/useAddQuestion";
+import useDragAndDrop from "@/app/hooks/useDragDrop";
 
 function FormBuilder() {
   const { formBuilderData, setFormBuilderData, scrollRef } = useUserContext();
   const draggedIndex = useRef<number | null>(null);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [draggedOverFormBuilder, setDraggedOverFormBuilder] =
     useState<boolean>(false);
 
   // drag-drop to reorder
 
-  const handleDragStart = useCallback((index: number) => {
-    draggedIndex.current = index;
-  }, []);
-
-  const handleDragOver = useCallback(
-    (e: React.DragEvent, index: number) => {
-      e.preventDefault();
-      if (hoveredIndex !== index) {
-        setHoveredIndex(index);
-      }
-    },
-    [hoveredIndex]
-  );
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setHoveredIndex(null);
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent, index: number) => {
-      e.preventDefault();
-
-      if (draggedIndex.current === null || draggedIndex.current === index) {
-        draggedIndex.current = null;
-        setHoveredIndex(null);
-        return;
-      }
-
-      const updatedQuestions = [...formBuilderData.questions];
-      const [draggedQuestion] = updatedQuestions.splice(
-        draggedIndex.current,
-        1
-      );
-      updatedQuestions.splice(index, 0, draggedQuestion);
-
-      setFormBuilderData((prev) => ({ ...prev, questions: updatedQuestions }));
-      draggedIndex.current = null;
-      setHoveredIndex(null);
-    },
-    [draggedIndex, formBuilderData.questions, setFormBuilderData]
-  );
+  const {
+    handleDragStart,
+    handleDragOver,
+    handleDragLeave,
+    handleDrop,
+    handleTouchStart,
+    handleTouchEnd,
+    hoveredIndex,
+  } = useDragAndDrop();
 
   // update form data
 
@@ -112,6 +79,22 @@ function FormBuilder() {
     [handleAddQuestion]
   );
 
+  // useEffect(() => {
+  //   const handleTouchMoveWithPassive = (e: React.TouchEvent) => {
+  //     handleTouchMove(e);
+  //   };
+
+  //   // Attach the passive event listener to the document
+  //   document.addEventListener("touchmove", handleTouchMoveWithPassive, {
+  //     passive: true,
+  //   });
+
+  //   // Cleanup the event listener when the component unmounts
+  //   return () => {
+  //     document.removeEventListener("touchmove", handleTouchMoveWithPassive);
+  //   };
+  // }, [handleTouchMove]);
+
   return (
     <div
       onDragOver={handleDragoverFormBuilder}
@@ -119,7 +102,7 @@ function FormBuilder() {
       onDrop={handleDropFormBuilder}
       className={`h-full  md:max-h-[calc(100vh-106px)] overflow-y-auto flex flex-col items-center gap-5 hide-scrollbar ${
         draggedOverFormBuilder && "border border-peerlistGreen"
-      } max-md:p-2 max-md:py-14 p-6 justify-start`}
+      } max-md:p-2 max-md:pb-12 p-6 justify-start`}
     >
       {formBuilderData.questions.map((question, questionIndex) => (
         <Card
@@ -128,12 +111,15 @@ function FormBuilder() {
           //     ? scrollRef
           //     : null
           // }
+          key={questionIndex}
           draggable
           onDragStart={() => handleDragStart(questionIndex)}
           onDragOver={(e) => handleDragOver(e, questionIndex)}
           onDragLeave={handleDragLeave}
           onDrop={(e) => handleDrop(e, questionIndex)}
-          key={question.id + Math.random()}
+          onTouchStart={() => handleTouchStart(questionIndex)}
+          onTouchEnd={handleTouchEnd}
+          data-index={questionIndex}
           className={`w-full ${
             hoveredIndex === questionIndex
               ? "border-peerlistGreen border-spacing-0.5"
