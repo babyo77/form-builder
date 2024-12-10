@@ -60,20 +60,17 @@ const useDragAndDrop = () => {
   }, []);
 
   // Handle touch move
-  const handleTouchMove = useCallback(
-    (e: React.TouchEvent) => {
-      e.preventDefault();
-      const touch = e.touches[0];
-      const element = document.elementFromPoint(touch.clientX, touch.clientY);
-      if (!element) return;
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    // const touch = e.touches[0];
+    // const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    // if (!element) return;
 
-      const newHoveredIndex = Number(element.getAttribute("data-index"));
-      if (hoveredIndex !== newHoveredIndex && !isNaN(newHoveredIndex)) {
-        setHoveredIndex(newHoveredIndex);
-      }
-    },
-    [hoveredIndex]
-  );
+    // const newHoveredIndex = Number(element.getAttribute("data-index"));
+    // if (hoveredIndex !== newHoveredIndex && !isNaN(newHoveredIndex)) {
+    //   setHoveredIndex(newHoveredIndex);
+    // }
+  }, []);
 
   // Handle touch end
   const handleTouchEnd = useCallback(() => {
