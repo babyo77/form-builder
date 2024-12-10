@@ -23,7 +23,7 @@ async function page({ params }: { params: { id: string } }) {
   );
   if (response.error)
     return (
-      <div className=" flex items-center font-semibold justify-center h-screen">
+      <div className=" flex col-span-4 items-center font-semibold justify-center h-screen">
         {response.error}
       </div>
     );

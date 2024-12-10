@@ -22,7 +22,7 @@ async function page() {
 
   if (response.error)
     return (
-      <div className=" flex items-center justify-center h-screen">
+      <div className=" flex items-center col-span-4 justify-center h-screen">
         Error: {response.error}
       </div>
     );
