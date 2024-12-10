@@ -35,6 +35,7 @@ function FormBuilder() {
     handleDragOver,
     handleDragLeave,
     handleDrop,
+    handleTouchMove,
     handleTouchStart,
     handleTouchEnd,
     hoveredIndex,
@@ -119,6 +120,7 @@ function FormBuilder() {
           onDrop={(e) => handleDrop(e, questionIndex)}
           onTouchStart={() => handleTouchStart(questionIndex)}
           onTouchEnd={handleTouchEnd}
+          onTouchMove={handleTouchMove}
           data-index={questionIndex}
           className={`w-full ${
             hoveredIndex === questionIndex
