@@ -31,10 +31,14 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <UserProvider>
-          <main className="w-full h-screen  md:overflow-hidden max-sm:px-0 max-lg:px-0  max-md:px-0 max-xs:px-0 max-xl:px-0 max-2xl:px-24 grid-cols-1 grid md:grid-cols-4 items-center justify-center">
-            <SetSession user={user} />
-            {children}
-          </main>
+          {user?.status === 429 ? (
+            <p className="p-4">{user?.error}</p>
+          ) : (
+            <main className="w-full h-screen  md:overflow-hidden max-sm:px-0 max-lg:px-0  max-md:px-0 max-xs:px-0 max-xl:px-0 max-2xl:px-24 grid-cols-1 grid md:grid-cols-4 items-center justify-center">
+              <SetSession user={user} />
+              {children}
+            </main>
+          )}
         </UserProvider>
         <Toaster
           position="bottom-right"

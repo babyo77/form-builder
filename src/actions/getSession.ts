@@ -17,7 +17,9 @@ export async function getSession() {
         cache: "no-cache",
       }
     );
-
+    if (response.status === 429) {
+      return response;
+    }
     if (response.success) {
       return response.data as any;
     }

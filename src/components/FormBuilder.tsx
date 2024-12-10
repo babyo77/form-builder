@@ -102,7 +102,7 @@ function FormBuilder() {
       onDrop={handleDropFormBuilder}
       className={`h-full  md:max-h-[calc(100vh-106px)] overflow-y-auto flex flex-col items-center gap-5 hide-scrollbar ${
         draggedOverFormBuilder && "border border-peerlistGreen"
-      } max-md:p-2 max-md:pb-12 p-6 justify-start`}
+      } max-md:p-2 max-md:py-16 p-6 justify-start`}
     >
       {formBuilderData.questions.map((question, questionIndex) => (
         <Card
