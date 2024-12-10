@@ -15,6 +15,7 @@ function FormFooterComp() {
   const [loader, setLoader] = useState<boolean>(false);
   const [publishLoader, setPublishLoader] = useState<boolean>(false);
   const saveFormController = useRef<AbortController | null>(null);
+  const firstRender = useRef<boolean>(true);
   const handlePublish = useCallback(async () => {
     setPublishLoader(true);
     const res = await api.get(
@@ -80,6 +81,11 @@ function FormFooterComp() {
   }, [setFormBuilderData, formBuilderData]);
   // const saveFromRealtime = useDebounce(saveForm);
   useEffect(() => {
+    if (formBuilderData.questions.length === 0) return;
+    if (firstRender.current && formBuilderData.questions) {
+      firstRender.current = false;
+      return;
+    }
     setDraft(false);
     saveForm().then(() => {});
   }, [formBuilderData.questions, formBuilderData.form_title]);
